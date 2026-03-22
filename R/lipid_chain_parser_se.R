@@ -425,10 +425,16 @@ add_chain_list_to_se <- function(se,
   
   rd <- SummarizedExperiment::rowData(se)
   lipid_col <- lipid_col %||% .resolve_lipid_name_col(se)
+
+  if (!is.null(lipid_col) && nzchar(lipid_col) && !lipid_col %in% colnames(rd)) {
+    alt_idx <- match(make.names(lipid_col), make.names(colnames(rd)))
+    if (!is.na(alt_idx)) lipid_col <- colnames(rd)[alt_idx]
+  }
+
   if (is.null(lipid_col) || !nzchar(lipid_col)) {
     stop(
       "rowData does not contain a recognized lipid name column ",
-      "(expected one of: Metabolite.name, Metabolite name, Metabolite, Name, Title).",
+      "(expected one of: Metabolite.name, Metabolite name).",
       call. = FALSE
     )
   }

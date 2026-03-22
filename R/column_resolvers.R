@@ -13,7 +13,7 @@
   }
 
   .pick_first_existing_col(
-    c("Metabolite.name", "Metabolite name", "Metabolite", "Name", "Title"),
+    c("Metabolite.name", "Metabolite name"),
     available
   ) %||% default
 }
