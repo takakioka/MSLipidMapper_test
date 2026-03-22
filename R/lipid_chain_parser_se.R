@@ -423,7 +423,7 @@ add_chain_list_to_se <- function(se,
                                  out_col   = "acyl_chains") {
   stopifnot(methods::is(se, "SummarizedExperiment"))
   
-  rd <- as.data.frame(SummarizedExperiment::rowData(se))
+  rd <- as.data.frame(SummarizedExperiment::rowData(se), check.names = FALSE)
   lipid_col <- lipid_col %||% .resolve_lipid_name_col(rd)
   if (is.null(lipid_col) || !nzchar(lipid_col)) {
     stop(

@@ -144,7 +144,7 @@ suppressPackageStartupMessages({
     return(se)
   }
 
-  rd_out <- as.data.frame(SummarizedExperiment::rowData(out))
+  rd_out <- as.data.frame(SummarizedExperiment::rowData(out), check.names = FALSE)
   if (!"acyl_chains" %in% colnames(rd_out)) {
     warning("Acyl-chain annotation finished without creating rowData$acyl_chains.")
     return(out)
