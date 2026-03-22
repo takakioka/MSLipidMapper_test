@@ -35,6 +35,7 @@ Imports:
     tidyr,
     tibble,
     forcats,
+    magrittr,
     jsonlite,
     xml2,
     svglite,

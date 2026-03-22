@@ -1,3 +1,4 @@
+importFrom(magrittr,"%>%")
 export(run_mslipidmapper)
 export(run_mslipidmapper_app)
 export(load_lipidomics_se)
