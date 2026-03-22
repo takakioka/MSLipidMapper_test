@@ -62,7 +62,7 @@ mod_plot_lipid_server <- function(
     .resolve_label_col <- function(se) {
       rd <- as.data.frame(SummarizedExperiment::rowData(se))
       cn <- colnames(rd)
-      cand <- c("Metabolite name", "Metabolite", "Name","Metabolite.name")
+      cand <- c("Metabolite name", "Metabolite.name", "Metabolite", "Name")
       hit  <- cand[cand %in% cn][1]
       if (length(hit)) hit else cn[1]
     }
