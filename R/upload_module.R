@@ -144,13 +144,13 @@ suppressPackageStartupMessages({
     return(se)
   }
 
-  rd_out <- as.data.frame(SummarizedExperiment::rowData(out), check.names = FALSE)
+  rd_out <- SummarizedExperiment::rowData(out)
   if (!"acyl_chains" %in% colnames(rd_out)) {
     warning("Acyl-chain annotation finished without creating rowData$acyl_chains.")
     return(out)
   }
 
-  n_nonempty <- sum(vapply(rd_out$acyl_chains, function(v) length(v) > 0, logical(1)))
+  n_nonempty <- sum(vapply(as.list(rd_out[["acyl_chains"]]), function(v) length(v) > 0, logical(1)))
   message(
     "[INFO] Acyl-chain annotation: ",
     n_nonempty, "/", nrow(rd_out),

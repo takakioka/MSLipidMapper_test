@@ -423,8 +423,8 @@ add_chain_list_to_se <- function(se,
                                  out_col   = "acyl_chains") {
   stopifnot(methods::is(se, "SummarizedExperiment"))
   
-  rd <- as.data.frame(SummarizedExperiment::rowData(se), check.names = FALSE)
-  lipid_col <- lipid_col %||% .resolve_lipid_name_col(rd)
+  rd <- SummarizedExperiment::rowData(se)
+  lipid_col <- lipid_col %||% .resolve_lipid_name_col(se)
   if (is.null(lipid_col) || !nzchar(lipid_col)) {
     stop(
       "rowData does not contain a recognized lipid name column ",
@@ -440,16 +440,16 @@ add_chain_list_to_se <- function(se,
     rd[[out_col]] <- NULL
   }
   
-  lipid_names <- rd[[lipid_col]]
+  lipid_names <- as.character(rd[[lipid_col]])
   
-  chains_list <- purrr::map(as.character(lipid_names), ~{
+  chains_list <- purrr::map(lipid_names, ~{
     out <- try(extract_acyl_chains_from_name(.x, rules = rules), silent = TRUE)
     if (inherits(out, "try-error") || is.null(out)) character(0) else as.character(out)
   })
   
   rd[[out_col]] <- .ensure_listcol(chains_list)
   
-  SummarizedExperiment::rowData(se) <- S4Vectors::DataFrame(rd)
+  SummarizedExperiment::rowData(se) <- rd
   se
 }
 
