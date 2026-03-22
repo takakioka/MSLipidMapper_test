@@ -419,11 +419,19 @@ parse_chain <- function(chain, oxygen_keywords = c(";OH", "(OH)")) {
 # ------------------------------------------------------------
 add_chain_list_to_se <- function(se,
                                  rules,
-                                 lipid_col = "Metabolite.name",
+                                 lipid_col = NULL,
                                  out_col   = "acyl_chains") {
   stopifnot(methods::is(se, "SummarizedExperiment"))
   
   rd <- as.data.frame(SummarizedExperiment::rowData(se))
+  lipid_col <- lipid_col %||% .resolve_lipid_name_col(rd)
+  if (is.null(lipid_col) || !nzchar(lipid_col)) {
+    stop(
+      "rowData does not contain a recognized lipid name column ",
+      "(expected one of: Metabolite.name, Metabolite name, Metabolite, Name, Title).",
+      call. = FALSE
+    )
+  }
   if (!lipid_col %in% colnames(rd)) {
     stop("rowData does not contain column: '", lipid_col, "'.", call. = FALSE)
   }

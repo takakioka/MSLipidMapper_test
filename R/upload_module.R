@@ -105,24 +105,25 @@ suppressPackageStartupMessages({
 # ============================================================
 # Helper: add acyl-chain metadata (if available)
 # ============================================================
-LIPID_RULES_PATH <- getOption(
-  "mslipidmapper.lipid_rules",
-  default = "./R/lipid_rules.yaml"
-)
-
 .add_acyl_chains_if_available <- function(se) {
   if (!exists("add_chain_list_to_se", mode = "function") ||
       !exists("load_lipid_rules", mode = "function")) {
     return(se)
   }
-  if (is.null(LIPID_RULES_PATH) || !nzchar(LIPID_RULES_PATH) ||
-      !file.exists(LIPID_RULES_PATH)) {
+
+  rules_path <- .mslm_rules_yaml_path(getOption("mslipidmapper.lipid_rules", NULL))
+  if (is.null(rules_path) || !nzchar(rules_path) || !file.exists(rules_path)) {
     return(se)
   }
 
-  rules <- try(load_lipid_rules(LIPID_RULES_PATH), silent = TRUE)
+  lipid_col <- .resolve_lipid_name_col(se)
+  if (is.null(lipid_col) || !nzchar(lipid_col)) {
+    return(se)
+  }
+
+  rules <- try(load_lipid_rules(rules_path), silent = TRUE)
   if (inherits(rules, "try-error") || is.null(rules)) {
-    warning("Failed to load lipid rules from: ", LIPID_RULES_PATH)
+    warning("Failed to load lipid rules from: ", rules_path)
     return(se)
   }
 
@@ -130,7 +131,7 @@ LIPID_RULES_PATH <- getOption(
     add_chain_list_to_se(
       se,
       rules,
-      lipid_col = "Metabolite.name",
+      lipid_col = lipid_col,
       out_col   = "acyl_chains"
     ),
     silent = TRUE
