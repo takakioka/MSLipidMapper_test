@@ -584,7 +584,7 @@ mod_plot_lipid_server <- function(
         lipid_class       = input$lipid_class,
         assay_name        = "abundance",
         lipid_class_col   = class_col,
-        feature_label_col = label_col,
+        #feature_label_col = label_col,
         sample_class_col  = "class",
         use_se            = TRUE,
         top_n             = top_n,
