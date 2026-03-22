@@ -33,7 +33,7 @@ This is the recommended option if you want to run MSLipidMapper directly from R.
 
 ```r
 install.packages("remotes")
-remotes::install_github("systemsomicslab/MSLipidMapper")
+remotes::install_github("takakioka/MSLipidMapper_test")
 ```
 
 Depending on your R environment, you may also need core Bioconductor packages:
@@ -62,7 +62,7 @@ Docker remains available for users who prefer a containerized runtime.
 #### Clone this repository
 
 ```bash
-git clone "https://github.com/systemsomicslab/MSLipidMapper.git"
+git clone "https://github.com/takakioka/MSLipidMapper_test.git"
 cd MSLipidMapper
 ```
 
