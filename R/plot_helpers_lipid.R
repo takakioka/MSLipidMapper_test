@@ -2,7 +2,7 @@
 # Helper: Class-level bar plot (for Alt view)
 # ======================================================================
 
-#' Bar plot for molecules in a selected lipid class (mean ± SE/SD)
+#' Bar plot for molecules in a selected lipid class (mean Â± SE/SD)
 #'
 #' This function is used in mod_plot_lipid_server() as an alternative view
 #' ("Bar plot") for the "Top molecules in selected lipid class" card.
@@ -149,7 +149,7 @@ plot_lipid_class_bar <- function(
     ggplot2::labs(
       title = lipid_class,
       x     = NULL,
-      y     = if (isTRUE(use_se)) "Abundance (mean ± SE)" else "Abundance (mean ± SD)",
+      y     = if (isTRUE(use_se)) "Abundance" else "Abundance",
       fill  = sample_class_col
     ) +
     # Helps avoid clipping when labels are long and rotated.
@@ -690,7 +690,7 @@ make_class_heatmap_CH <- function(se, class_col, class_name,
   # store x levels (reuse later)
   x_levels <- levels(tidy[[x_var]])
   
-  # ---- Mean abundance: molecule × class ----
+  # ---- Mean abundance: molecule Ã— class ----
   M <- tidy |>
     dplyr::group_by(.data$feature_id, .data[[x_var]]) |>
     dplyr::summarise(mu = mean(.data$abundance, na.rm = TRUE), .groups = "drop")
@@ -717,7 +717,7 @@ make_class_heatmap_CH <- function(se, class_col, class_name,
   
   if (!nrow(M)) return(NULL)
   
-  # ---- wide matrix (feature × class) ----
+  # ---- wide matrix (feature Ã— class) ----
   x_sym <- rlang::sym(x_var)
   M_wide <- tidyr::pivot_wider(M, names_from = !!x_sym, values_from = "mu")
   rn <- M_wide$feature_id
