@@ -108,16 +108,19 @@ suppressPackageStartupMessages({
 .add_acyl_chains_if_available <- function(se) {
   if (!exists("add_chain_list_to_se", mode = "function") ||
       !exists("load_lipid_rules", mode = "function")) {
+    warning("Acyl-chain annotation skipped: required functions are not available.")
     return(se)
   }
 
   rules_path <- .mslm_rules_yaml_path(getOption("mslipidmapper.lipid_rules", NULL))
   if (is.null(rules_path) || !nzchar(rules_path) || !file.exists(rules_path)) {
+    warning("Acyl-chain annotation skipped: lipid rules YAML was not found.")
     return(se)
   }
 
   lipid_col <- .resolve_lipid_name_col(se)
   if (is.null(lipid_col) || !nzchar(lipid_col)) {
+    warning("Acyl-chain annotation skipped: no lipid name column was detected in rowData.")
     return(se)
   }
 
@@ -140,6 +143,20 @@ suppressPackageStartupMessages({
     warning("Failed to add acyl_chains: ", as.character(out))
     return(se)
   }
+
+  rd_out <- as.data.frame(SummarizedExperiment::rowData(out))
+  if (!"acyl_chains" %in% colnames(rd_out)) {
+    warning("Acyl-chain annotation finished without creating rowData$acyl_chains.")
+    return(out)
+  }
+
+  n_nonempty <- sum(vapply(rd_out$acyl_chains, function(v) length(v) > 0, logical(1)))
+  message(
+    "[INFO] Acyl-chain annotation: ",
+    n_nonempty, "/", nrow(rd_out),
+    " features annotated using ", basename(rules_path),
+    " (lipid column: ", lipid_col, ")."
+  )
   out
 }
 
