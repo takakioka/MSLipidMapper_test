@@ -101,7 +101,7 @@ Prepare a table exported from MS-DIAL or a generic wide-format CSV file.
 
 #### A) MS-DIAL alignment table (recommended)
 
-- Export the alignment result table from MS-DIAL as CSV or TSV
+- Export the alignment result table from MS-DIAL as CSV
 - The file should include:
   - annotation columns such as lipid name and class
   - sample intensity columns, one column per sample
